@@ -1,11 +1,14 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { galleryData } from "@/lib/galleryData";
 
 type Photo = typeof galleryData[0];
 
 export function PhotoModal({ photo, onClose, allPhotos, onNavigate }: { photo: Photo | null, onClose: () => void, allPhotos: Photo[], onNavigate: (p: Photo) => void }) {
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
 
     // keyboard nav
     useEffect(() => {
@@ -22,7 +25,9 @@ export function PhotoModal({ photo, onClose, allPhotos, onNavigate }: { photo: P
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [photo, allPhotos, onClose, onNavigate]);
 
-    return (
+    if (!mounted) return null;
+
+    return createPortal(
         <AnimatePresence>
             {photo && (
                 <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 md:p-8">
@@ -88,6 +93,7 @@ export function PhotoModal({ photo, onClose, allPhotos, onNavigate }: { photo: P
                     </div>
                 </div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 }

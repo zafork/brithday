@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { useScrollDirection } from "@/hooks/useScrollDirection";
 
 const navLinks = [
     { name: "INICIO", path: "/", icon: "rocket_launch" },
@@ -14,12 +13,10 @@ const navLinks = [
 
 export default function Navbar() {
     const pathname = usePathname();
-    const scrollDirection = useScrollDirection();
 
     return (
         <nav
-            className={`fixed top-0 left-0 w-full h-16 z-50 transition-transform duration-300 backdrop-blur-md bg-transparent border-b border-[rgba(167,139,250,0.1)] ${scrollDirection === "down" ? "-translate-y-full" : "translate-y-0"
-                }`}
+            className="fixed top-0 left-0 w-full h-16 z-50 backdrop-blur-md bg-transparent border-b border-[rgba(167,139,250,0.1)]"
         >
             <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
                 <Link href="/" className="font-mono text-accent-nebula tracking-widest text-lg font-bold">

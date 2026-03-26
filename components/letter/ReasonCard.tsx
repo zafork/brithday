@@ -1,30 +1,31 @@
 "use client";
+
 import { motion } from "framer-motion";
 
 export function ReasonCard({ id, icon, text, index }: { id: string, icon: string, text: string, index: number }) {
     return (
         <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="relative p-6 md:p-8 rounded-lg border border-[rgba(167,139,250,0.15)] bg-surface/50 hover:bg-surface transition-colors duration-300 group overflow-hidden shadow-lg hover:shadow-[0_0_20px_var(--glow-purple)]"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: (index % 3) * 0.15 }}
+            className="relative p-3 md:p-4 rounded-lg border border-[rgba(167,139,250,0.15)] bg-surface/50 hover:bg-surface transition-colors duration-300 group overflow-hidden shadow-md hover:shadow-[0_0_15px_var(--glow-purple)] flex flex-row items-center gap-4 cursor-default"
         >
-            {/* Big Number Background */}
-            <div className="absolute -right-2 -bottom-6 font-display font-bold text-[8rem] leading-none text-white opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-300 pointer-events-none select-none">
+            <div className="absolute top-1 right-2 font-display font-bold text-[3rem] leading-none text-white opacity-[0.03] pointer-events-none select-none">
                 {id}
             </div>
 
-            <div className="relative z-10">
-                <span className="material-symbols-rounded text-3xl md:text-4xl text-accent-nebula mb-5 block drop-shadow-[0_0_8px_rgba(167,139,250,0.4)] group-hover:scale-110 group-hover:-translate-y-1 transition-transform duration-300 origin-left">
+            <div className="shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full border border-accent-star/30 flex items-center justify-center bg-void/50 group-hover:bg-void group-hover:scale-110 transition-all duration-300">
+                <span className="material-symbols-rounded text-[20px] md:text-[24px] text-accent-nebula drop-shadow-[0_0_8px_rgba(167,139,250,0.4)]">
                     {icon}
                 </span>
-                <p className="font-body font-light text-text-primary text-base md:text-lg leading-relaxed shadow-black drop-shadow-md">
+            </div>
+
+            <div className="relative z-10 flex-1">
+                <p className="font-body font-light text-text-primary text-[0.8rem] md:text-[0.9rem] leading-[1.5] drop-shadow-md">
                     {text}
                 </p>
             </div>
 
-            {/* Subtle hover glow gradient */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(167,139,250,0.08)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
         </motion.div>
     );

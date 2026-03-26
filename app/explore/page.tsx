@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { planetMessages } from "@/lib/planetData";
 import { MessageModal } from "@/components/planet/MessageModal";
+import { config } from "@/lib/config";
 
 const PlanetScene = dynamic(() => import("@/components/planet/PlanetScene"), {
     ssr: false,
@@ -20,6 +21,7 @@ type Message = typeof planetMessages[0];
 export default function ExplorePage() {
     const [activeMessage, setActiveMessage] = useState<Message | null>(null);
     const [discoveredIds, setDiscoveredIds] = useState<Set<number>>(new Set());
+    const [showFinalMessage, setShowFinalMessage] = useState(false);
 
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
@@ -31,11 +33,18 @@ export default function ExplorePage() {
         }
     };
 
+    const handleCloseModal = () => {
+        setActiveMessage(null);
+        if (discoveredIds.size === planetMessages.length) {
+            setTimeout(() => setShowFinalMessage(true), 600);
+        }
+    };
+
     const progress = (discoveredIds.size / planetMessages.length) * 100;
     const isComplete = discoveredIds.size === planetMessages.length;
 
     return (
-        <div className="w-full relative flex flex-col items-center overflow-hidden h-[calc(100vh-144px)]">
+        <div className="flex-1 w-full relative flex flex-col items-center overflow-hidden">
 
             {/* Header UI over Canvas */}
             <motion.div
@@ -76,14 +85,63 @@ export default function ExplorePage() {
                 <PlanetScene
                     activeMessage={activeMessage}
                     onHotspotClick={handleHotspotClick}
+                    discoveredIds={discoveredIds}
                 />
             </div>
 
-            {/* Modal */}
+            {/* Item Modal */}
             <MessageModal
                 message={activeMessage}
-                onClose={() => setActiveMessage(null)}
+                onClose={handleCloseModal}
             />
+
+            {/* Final Message Modal */}
+            <AnimatePresence>
+                {showFinalMessage && (
+                    <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-void/80 backdrop-blur-lg"
+                            onClick={() => setShowFinalMessage(false)}
+                        />
+
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8, y: 30 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.8, y: 30 }}
+                            transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                            className="relative z-10 w-full max-w-lg bg-surface rounded-xl border border-accent-star/50 shadow-[0_0_50px_rgba(251,191,36,0.2)] overflow-hidden text-center p-8 md:p-12 pointer-events-auto"
+                        >
+                            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-accent-star to-accent-nebula" />
+
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                                className="mx-auto w-20 h-20 mb-6 bg-[rgba(251,191,36,0.1)] rounded-full flex items-center justify-center border border-accent-star/30 shadow-[0_0_20px_rgba(251,191,36,0.3)]"
+                            >
+                                <span className="material-symbols-rounded text-5xl text-accent-star">rocket_launch</span>
+                            </motion.div>
+
+                            <h2 className="font-display text-3xl md:text-5xl text-white mb-4 leading-tight">
+                                Misión Cumplida
+                            </h2>
+                            <div className="h-[1px] w-24 mx-auto bg-gradient-to-r from-transparent via-accent-star to-transparent mb-6 opacity-50" />
+                            <p className="font-body text-text-primary/90 text-sm md:text-lg mb-8 leading-relaxed font-light">
+                                Has explorado todos los rincones de este pequeño planeta y descubierto cada uno de los mensajes. Gracias por orbitar conmigo, {config.birthdayPerson.name}. Mi universo es más hermoso porque tú existes en él.
+                            </p>
+
+                            <button
+                                onClick={() => setShowFinalMessage(false)}
+                                className="font-mono text-xs tracking-widest text-void bg-accent-star hover:bg-white px-8 py-3 rounded-full transition-colors font-bold shadow-[0_0_15px_rgba(251,191,36,0.5)] hover:shadow-[0_0_20px_rgba(255,255,255,0.8)]"
+                            >
+                                VOLVER A LA NAVE
+                            </button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
         </div>
     );

@@ -20,7 +20,7 @@ function CameraController({ targetPosition, isModalOpen }: { targetPosition: THR
     useFrame(() => {
         if (isModalOpen && targetPosition) {
             const dir = targetPosition.clone().normalize();
-            const idealPos = dir.multiplyScalar(2.0); // Move in close to see message
+            const idealPos = dir.multiplyScalar(2.0);
             camera.position.lerp(idealPos, 0.05);
             if (controlsRef.current) {
                 controlsRef.current.target.lerp(targetPosition, 0.05);
@@ -67,10 +67,12 @@ function DecoratorRing() {
 
 export default function PlanetScene({
     onHotspotClick,
-    activeMessage
+    activeMessage,
+    discoveredIds
 }: {
     onHotspotClick: (msg: Message, pos: THREE.Vector3) => void,
-    activeMessage: Message | null
+    activeMessage: Message | null,
+    discoveredIds: Set<number>
 }) {
     const [targetPos, setTargetPos] = useState<THREE.Vector3 | null>(null);
 
@@ -105,6 +107,7 @@ export default function PlanetScene({
                         key={msg.id}
                         message={msg}
                         radius={1.02}
+                        isDiscovered={discoveredIds.has(msg.id)}
                         onClick={handleHotspotClick}
                     />
                 ))}

@@ -6,7 +6,8 @@ export const config = {
   // ← EDITA AQUÍ
   birthdayPerson: {
     name: "Nombre de Ella",          // aparece en hero, carta, loading
-    birthday: "1999-03-15",          // formato YYYY-MM-DD para el countdown
+    // Genera la fecha de hoy automáticamente para que coincida con "ES TU DÍA"
+    birthday: new Date().toISOString().split("T")[0],
   },
   author: {
     name: "Tu Nombre",               // aparece en la firma de la carta

@@ -15,7 +15,10 @@ export default function RootLayout({
 }) {
     return (
         <html lang="es">
-            <body className="bg-void text-text-primary antialiased font-body overflow-x-hidden w-full min-h-screen">
+            <head>
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+            </head>
+            <body className="bg-void text-text-primary antialiased font-body overflow-x-hidden w-full min-h-[100dvh] selection:bg-accent-nebula selection:text-void flex flex-col">
                 <div className="fixed inset-0 z-[9999] pointer-events-none opacity-[0.035]">
                     <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
                         <filter id="noiseFilter">

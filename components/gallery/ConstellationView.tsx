@@ -25,35 +25,37 @@ export function ConstellationView({ photos, onPhotoClick }: { photos: Photo[], o
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1 }}
-            className="w-full h-[600px] md:h-[800px] relative overflow-hidden bg-surface/30 rounded-lg border border-[rgba(167,139,250,0.1)] shadow-inner"
+            className="w-full h-full min-h-[500px] lg:min-h-0 relative bg-surface/30 rounded-2xl border border-[rgba(167,139,250,0.1)] shadow-inner flex"
         >
-            <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                {nodes.map((node, i) => {
-                    return nodes.slice(i + 1).map((targetNode, j) => {
-                        const dx = node.x - targetNode.x;
-                        const dy = node.y - targetNode.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
+            <div className="absolute inset-0 overflow-hidden bg-surface/30 rounded-2xl">
+                <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                    {nodes.map((node, i) => {
+                        return nodes.slice(i + 1).map((targetNode, j) => {
+                            const dx = node.x - targetNode.x;
+                            const dy = node.y - targetNode.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
 
-                        // Connect only if close enough
-                        if (dist < 35) {
-                            const isHoveredLine = hoveredNode === node.id || hoveredNode === targetNode.id;
-                            return (
-                                <line
-                                    key={`${i}-${j}`}
-                                    x1={`${node.x}%`}
-                                    y1={`${node.y}%`}
-                                    x2={`${targetNode.x}%`}
-                                    y2={`${targetNode.y}%`}
-                                    stroke={isHoveredLine ? "var(--accent-nebula)" : "rgba(167,139,250,0.15)"}
-                                    strokeWidth={isHoveredLine ? 1.5 : 0.8}
-                                    className="transition-colors duration-500"
-                                />
-                            );
-                        }
-                        return null;
-                    });
-                })}
-            </svg>
+                            // Connect only if close enough
+                            if (dist < 35) {
+                                const isHoveredLine = hoveredNode === node.id || hoveredNode === targetNode.id;
+                                return (
+                                    <line
+                                        key={`${i}-${j}`}
+                                        x1={`${node.x}%`}
+                                        y1={`${node.y}%`}
+                                        x2={`${targetNode.x}%`}
+                                        y2={`${targetNode.y}%`}
+                                        stroke={isHoveredLine ? "var(--accent-nebula)" : "rgba(167,139,250,0.15)"}
+                                        strokeWidth={isHoveredLine ? 1.5 : 0.8}
+                                        className="transition-colors duration-500"
+                                    />
+                                );
+                            }
+                            return null;
+                        });
+                    })}
+                </svg>
+            </div>
 
             {nodes.map((node) => {
                 const isHovered = hoveredNode === node.id;
