@@ -63,7 +63,7 @@ export default function CustomCursor() {
         <>
             <motion.div
                 ref={cursorRef}
-                className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full flex items-center justify-center transition-colors duration-200"
+                className="fixed top-0 left-0 pointer-events-none z-[999999] rounded-full flex items-center justify-center transition-colors duration-200"
                 style={{
                     transform: "translate(-50%, -50%)",
                     border: '1px solid var(--accent-nebula)'
@@ -76,7 +76,7 @@ export default function CustomCursor() {
             />
             <div
                 ref={dotRef}
-                className="fixed top-0 left-0 w-[4px] h-[4px] rounded-full bg-accent-star pointer-events-none z-[10000]"
+                className="fixed top-0 left-0 w-[4px] h-[4px] rounded-full bg-accent-star pointer-events-none z-[999999]"
                 style={{ transform: "translate(-50%, -50%)" }}
             />
         </>

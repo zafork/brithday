@@ -40,6 +40,60 @@ function TechGrid() {
     );
 }
 
+// Subtle rotating celestial radar
+function OrbitalMap() {
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.08 }}
+            transition={{ duration: 3 }}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[800px] h-[600px] md:h-[800px] pointer-events-none z-0 flex items-center justify-center"
+        >
+            <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 180, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 border-[0.5px] border-white rounded-full border-dashed"
+            />
+            <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ duration: 240, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-16 md:inset-24 border-[0.5px] border-accent-nebula rounded-full"
+            />
+            <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-32 md:inset-48 border-[0.5px] border-accent-star rounded-full border-dotted"
+            />
+            <div className="absolute top-0 bottom-0 left-1/2 w-[1px] bg-gradient-to-b from-transparent via-white/50 to-transparent" />
+            <div className="absolute left-0 right-0 top-1/2 h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+
+            {/* Little decorative orbit dots */}
+            <div className="absolute top-16 left-1/2 w-2 h-2 rounded-full bg-accent-nebula/50 shadow-[0_0_10px_var(--glow-purple)]" />
+            <div className="absolute bottom-48 right-1/2 w-1.5 h-1.5 rounded-full bg-accent-star/50 shadow-[0_0_10px_var(--glow-gold)]" />
+        </motion.div>
+    );
+}
+
+// Corner HUD
+function CornerBrackets() {
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.3 }}
+            transition={{ delay: 1, duration: 2 }}
+            className="absolute inset-4 md:inset-8 lg:inset-12 pointer-events-none z-10"
+        >
+            <div className="absolute top-0 left-0 w-8 md:w-12 h-8 md:h-12 border-t-[1.5px] border-l-[1.5px] border-accent-nebula/50" />
+            <div className="absolute top-0 right-0 w-8 md:w-12 h-8 md:h-12 border-t-[1.5px] border-r-[1.5px] border-accent-nebula/50" />
+            <div className="absolute bottom-0 left-0 w-8 md:w-12 h-8 md:h-12 border-b-[1.5px] border-l-[1.5px] border-accent-star/50" />
+            <div className="absolute bottom-0 right-0 w-8 md:w-12 h-8 md:h-12 border-b-[1.5px] border-r-[1.5px] border-accent-star/50" />
+
+            <div className="hidden md:block absolute top-[50px] left-[-30px] text-[9px] font-mono text-white/50 tracking-[0.3em] -rotate-90 origin-top-left">SYS.INIT.01</div>
+            <div className="hidden md:block absolute bottom-[50px] right-[-30px] text-[9px] font-mono text-white/50 tracking-[0.3em] rotate-90 origin-bottom-right">ORBIT.STABLE</div>
+        </motion.div>
+    );
+}
+
 export default function Home() {
     const router = useRouter();
 
@@ -48,6 +102,8 @@ export default function Home() {
 
             <ShootingStars />
             <TechGrid />
+            <OrbitalMap />
+            <CornerBrackets />
 
             {/* Background Nebulas */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -72,16 +128,16 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 2, duration: 1, ease: "easeOut" }}
                     onClick={() => router.push('/gallery')}
-                    className="group relative z-10 mt-8 md:mt-12 font-body font-medium text-sm md:text-base px-8 py-4 md:px-12 md:py-5 rounded-md overflow-hidden transition-all duration-500 shadow-[0_0_20px_rgba(167,139,250,0.15)] hover:shadow-[0_0_40px_rgba(167,139,250,0.4)] hover:-translate-y-1"
+                    className="group relative z-10 mt-10 md:mt-16 font-mono font-medium tracking-[0.2em] text-[10px] md:text-sm px-10 py-4 md:px-14 md:py-5 rounded-full overflow-hidden transition-all duration-500 shadow-[0_0_20px_rgba(167,139,250,0.1)] hover:shadow-[0_0_35px_rgba(167,139,250,0.3)] hover:-translate-y-1 border border-accent-nebula/30 hover:border-accent-nebula/80"
                 >
-                    <span className="relative z-10 group-hover:text-void transition-colors flex items-center gap-3 tracking-wider text-text-primary">
-                        INICIAR EXPLORACIÓN <span className="material-symbols-rounded text-[20px] transition-transform group-hover:translate-x-2">arrow_forward</span>
+                    <span className="relative z-10 text-white flex items-center gap-3">
+                        INICIAR MISIÓN
+                        <span className="material-symbols-rounded text-[18px] md:text-[22px] transition-transform duration-300 group-hover:translate-x-2 group-hover:text-accent-nebula">rocket_launch</span>
                     </span>
 
-                    {/* Border and gradient backgrounds */}
-                    <div className="absolute inset-0 p-[1px] bg-gradient-to-r from-accent-nebula via-white/20 to-accent-star -z-10" />
-                    <div className="absolute inset-[1px] bg-void/90 backdrop-blur-md rounded-md -z-10 group-hover:bg-transparent transition-colors duration-500" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-accent-nebula to-accent-star opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
+                    {/* Subtle hover background */}
+                    <div className="absolute inset-0 bg-accent-nebula opacity-0 group-hover:opacity-[0.12] transition-opacity duration-500 pointer-events-none -z-10" />
+                    <div className="absolute inset-0 bg-void -z-20" />
                 </motion.button>
 
             </div>

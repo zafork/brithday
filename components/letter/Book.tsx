@@ -13,10 +13,10 @@ export function Book() {
     const { birthdayPerson, author, letter } = config;
 
     return (
-        <div className="relative w-full max-w-[900px] h-[750px] md:h-[650px] perspective-[2000px] flex items-center justify-center -mt-10 md:mt-0">
+        <div className="relative w-full max-w-[850px] h-[600px] md:h-[550px] perspective-[2000px] flex items-center justify-center -mt-16 md:-mt-12">
 
             {/* Centered Desktop Book Layout */}
-            <div className={`relative w-full h-full transition-transform duration-1000 ease-in-out ${currentPage === 0 ? "md:translate-x-1/4" : "translate-x-0"}`}>
+            <div className={`relative w-full h-full transition-transform duration-1000 ease-in-out ${currentPage === 0 ? "md:-translate-x-1/4" : "translate-x-0"}`}>
 
                 {/* Right side background (cover & right page) */}
                 <div className="absolute top-0 right-0 w-full md:w-1/2 h-full bg-elevated rounded-xl md:rounded-l-none shadow-[10px_10px_50px_rgba(0,0,0,0.8),inset_2px_0_10px_rgba(255,255,255,0.05)] border border-[rgba(167,139,250,0.2)] md:border-l-0" />
@@ -122,21 +122,32 @@ export function Book() {
 
                 </div>
 
-                {/* Paper texture over whole book */}
-                <div className="absolute inset-0 pointer-events-none opacity-[0.25] mix-blend-overlay rounded-xl overflow-hidden z-20">
+                {/* Paper texture over right page */}
+                <div className="absolute top-0 bottom-0 right-0 w-full md:w-1/2 pointer-events-none opacity-[0.25] mix-blend-overlay rounded-xl md:rounded-l-none overflow-hidden z-20">
                     <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                        <filter id="bookNoise">
+                        <filter id="bookNoiseRight">
                             <feTurbulence type="fractalNoise" baseFrequency="0.04" result="noise" />
                             <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.35 0" />
                         </filter>
-                        <rect width="100%" height="100%" filter="url(#bookNoise)" />
+                        <rect width="100%" height="100%" filter="url(#bookNoiseRight)" />
+                    </svg>
+                </div>
+
+                {/* Paper texture over left page */}
+                <div className={`hidden md:block absolute top-0 bottom-0 left-0 w-1/2 pointer-events-none mix-blend-overlay rounded-xl rounded-r-none overflow-hidden z-20 transition-opacity duration-700 ${currentPage === 0 ? "opacity-0" : "opacity-[0.25]"}`}>
+                    <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                        <filter id="bookNoiseLeft">
+                            <feTurbulence type="fractalNoise" baseFrequency="0.04" result="noise" />
+                            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.35 0" />
+                        </filter>
+                        <rect width="100%" height="100%" filter="url(#bookNoiseLeft)" />
                     </svg>
                 </div>
             </div>
 
             {/* Book Navigation outside */}
             {currentPage > 0 && (
-                <div className="absolute -bottom-20 md:-bottom-24 left-1/2 -translate-x-1/2 flex items-center justify-between w-full max-w-sm px-4">
+                <div className="absolute -bottom-16 md:-bottom-20 left-1/2 -translate-x-1/2 flex items-center justify-between w-full max-w-sm px-4">
                     <button
                         onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
                         className="p-3 md:p-4 rounded-full border border-[rgba(167,139,250,0.4)] text-text-secondary hover:text-white hover:bg-[rgba(167,139,250,0.2)] transition-all bg-void/80 backdrop-blur shadow-[0_0_15px_rgba(0,0,0,0.5)] font-bold"
