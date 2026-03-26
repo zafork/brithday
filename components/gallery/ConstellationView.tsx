@@ -1,6 +1,7 @@
 "use client";
 import React, { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import { galleryData } from "@/lib/galleryData";
 
 type Photo = typeof galleryData[0];
@@ -99,10 +100,12 @@ export function ConstellationView({ photos, onPhotoClick }: { photos: Photo[], o
                         onClick={() => onPhotoClick(node)}
                     >
                         <div className="w-full h-full relative overflow-hidden" style={{ borderRadius: "inherit" }}>
-                            <img
+                            <Image
                                 src={node.src}
-                                alt=""
-                                className={`w-full h-full object-cover transition-opacity duration-500 ${isHovered ? "opacity-100 scale-105" : "opacity-60 scale-100"}`}
+                                alt={node.title || "Fotografía de nuestra constelación"}
+                                fill
+                                sizes="(max-width: 768px) 100vw, 280px"
+                                className={`object-cover transition-opacity duration-500 ${isHovered ? "opacity-100 scale-105" : "opacity-60 scale-100"}`}
                             />
                             <AnimatePresence>
                                 {isHovered && (
